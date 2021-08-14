@@ -60,13 +60,14 @@ class ZendoModerator:
         rule_quantity = rule.quantity
         rule_shape = rule.shape
 
+        # for AT_LEAST add up to 3 extra qty
         if rule_is_at_least:
-            if random.choice([0, 1]) == 1:
-                rule_quantity += random.choice(list(range(1, 5)))
+            rule_quantity += random.choice(list(range(4)))
 
+        # harder structures have more meaningless components
         extra_qty_for_difficulty = 0
         if difficulty == "medium": extra_qty_for_difficulty = 3
-        elif difficulty == "hard": extra_qty_for_difficulty = 5
+        elif difficulty == "hard": extra_qty_for_difficulty = 6
 
         # list where index 0-8 represents the folowing:
         # num_red_pyramids, num_red_wedges, num_red_blocks,
@@ -74,57 +75,33 @@ class ZendoModerator:
         # num_yellow_pyramids, num_yellow_wedges, num_yellow_blocks
         structure_attribute_list = [0] * 9
 
-        if rule_color and rule_shape:
-            if rule_shape == PYRAMIDS:
-                if rule_color == RED: structure_attribute_list[0] = rule_quantity
-                elif rule_color == BLUE: structure_attribute_list[3] = rule_quantity
-                elif rule_color == YELLOW: structure_attribute_list[6] = rule_quantity
-            elif rule_shape == WEDGES:
-                if rule_color == RED: structure_attribute_list[1] = rule_quantity
-                elif rule_color == BLUE: structure_attribute_list[4] = rule_quantity
-                elif rule_color == YELLOW: structure_attribute_list[7] = rule_quantity
-            elif rule_shape == BLOCKS:
-                if rule_color == RED: structure_attribute_list[2] = rule_quantity
-                elif rule_color == BLUE: structure_attribute_list[5] = rule_quantity
-                elif rule_color == YELLOW: structure_attribute_list[8] = rule_quantity
-            extra_difficulty_count = 0
-            while extra_difficulty_count < extra_qty_for_difficulty:
-                index = random.choice([i for i in range(3, 9)])
-                if structure_attribute_list[index] == 0:
-                    structure_attribute_list[index] += 1
-                    extra_difficulty_count += 1
-        elif rule_color:
-            if rule_color == RED:
-                for _ in range(rule_quantity):
-                    structure_attribute_list[random.choice([i for i in range(0, 3)])] += 1
-                for _ in range(extra_qty_for_difficulty):
-                    structure_attribute_list[random.choice([i for i in range(3, 9)])] += 1
-            elif rule_color == BLUE:
-                for _ in range(rule_quantity):
-                    structure_attribute_list[random.choice([i for i in range(3, 6)])] += 1
-                for _ in range(extra_qty_for_difficulty):
-                    structure_attribute_list[random.choice([i for i in range(0, 3)] + [i for i in range(6, 9)])] += 1
-            elif rule_color == YELLOW:
-                for _ in range(rule_quantity):
-                    structure_attribute_list[random.choice([i for i in range(6, 9)])] += 1
-                for _ in range(extra_qty_for_difficulty):
-                    structure_attribute_list[random.choice([i for i in range(0, 6)])] += 1
-        elif rule_shape:
-            if rule_shape == PYRAMIDS:
-                for _ in range(rule_quantity):
-                    structure_attribute_list[random.choice([0, 3, 6])] += 1
-                for _ in range(extra_qty_for_difficulty):
-                    structure_attribute_list[random.choice([1, 2, 4, 5, 7, 8])] += 1
-            elif rule_shape == WEDGES:
-                for _ in range(rule_quantity):
-                    structure_attribute_list[random.choice([1, 4, 7])] += 1
-                for _ in range(extra_qty_for_difficulty):
-                    structure_attribute_list[random.choice([0, 2, 3, 5, 6, 8])] += 1
-            elif rule_shape == BLOCKS:
-                for _ in range(rule_quantity):
-                    structure_attribute_list[random.choice([2, 5, 8])] += 1
-                for _ in range(extra_qty_for_difficulty):
-                    structure_attribute_list[random.choice([0, 1, 3, 4, 6, 7])] += 1
+        structure_attribute_to_index_dict = {
+            RED+PYRAMIDS: [0],
+            RED+WEDGES: [1],
+            RED+BLOCKS: [2],
+            BLUE+PYRAMIDS: [3],
+            BLUE+WEDGES: [4],
+            BLUE+BLOCKS: [5],
+            YELLOW+PYRAMIDS: [6],
+            YELLOW+WEDGES: [7],
+            YELLOW+BLOCKS: [8],
+            RED: [0, 1, 2],
+            BLUE: [3, 4, 5],
+            YELLOW: [6, 7, 8],
+            PYRAMIDS: [0, 3, 6],
+            WEDGES: [1, 4, 7],
+            BLOCKS: [2, 5, 8]
+        }
+
+        target_indexes = []
+        if rule_color and rule_shape: target_indexes = structure_attribute_to_index_dict[rule_color + rule_shape]
+        elif rule_color: target_indexes = structure_attribute_to_index_dict[rule_color]
+        elif rule_shape: target_indexes = structure_attribute_to_index_dict[rule_shape]
+
+        for _ in range(rule_quantity):
+            structure_attribute_list[random.choice(target_indexes)] += 1
+        for _ in range(extra_qty_for_difficulty):
+            structure_attribute_list[random.choice([i for i in range(0, 9) if i not in target_indexes])] += 1
 
         return Structure(
             num_red_pyramids=structure_attribute_list[0],

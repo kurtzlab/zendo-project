@@ -140,4 +140,3 @@ class TestZendoModerator(unittest.TestCase):
         mod_hard = ZendoModerator(difficulty="hard")
         for base_structure in mod_hard.base_structures:
             self.assertTrue(mod_hard.does_test_structure_fit_moderator_rule(base_structure))
-        print(mod_medium._rule, mod_medium.base_structures[0], mod_medium.base_structures[1])
