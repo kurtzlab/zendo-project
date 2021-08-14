@@ -100,3 +100,27 @@ class Structure:
     @property
     def num_blocks(self):
         return self._num_blocks
+
+    def __EQ__(self, other):
+        return self._num_red_pyramids == other.num_red_pyramids and \
+            self._num_red_wedges == other.num_red_wedges and \
+            self._num_red_blocks == other.num_red_blocks and \
+            self._num_blue_pyramids == other.num_blue_pyramids and \
+            self._num_blue_wedges == other.num_blue_wedges and \
+            self._num_blue_blocks == other.num_blue_blocks and \
+            self._num_yellow_pyramids == other.num_yellow_pyramids and \
+            self._num_yellow_wedges == other.num_yellow_wedges and \
+            self._num_yellow_blocks == other.num_yellow_blocks
+
+    def __str__(self):
+        return f"""
+        num_red_pyramids: {self._num_red_pyramids}
+        num_red_wedges: {self._num_red_wedges}
+        num_red_blocks: {self._num_red_blocks}
+        num_blue_pyramids: {self._num_blue_pyramids}
+        num_blue_wedges: {self._num_blue_wedges}
+        num_blue_blocks: {self._num_blue_blocks}
+        num_yellow_pyramids: {self._num_yellow_pyramids}
+        num_yellow_wedges: {self._num_yellow_wedges}
+        num_yellow_blocks: {self._num_yellow_blocks}
+        """
