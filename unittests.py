@@ -1,6 +1,7 @@
 """
 Unittests for zendo project
 """
+from zendo_moderator import ZendoModerator
 from constants import BLOCKS, PYRAMIDS, RED, YELLOW
 import unittest
 
@@ -120,3 +121,22 @@ class TestRule(unittest.TestCase):
         structure6 = Structure()
         self.assertTrue(rule3.does_structure_fit_rule(structure5))
         self.assertFalse(rule3.does_structure_fit_rule(structure6))
+
+
+class TestZendoModerator(unittest.TestCase):
+
+    def test_base_structures_abide_by_rule(self):
+        """
+        Tests creating a moderator and assert the base rule and structures generated
+        """
+        mod_easy = ZendoModerator()
+        for base_structure in mod_easy.base_structures:
+            self.assertTrue(mod_easy.does_test_structure_fit_moderator_rule(base_structure))
+
+        mod_medium = ZendoModerator(difficulty="medium")
+        for base_structure in mod_medium.base_structures:
+            self.assertTrue(mod_medium.does_test_structure_fit_moderator_rule(base_structure))
+
+        mod_hard = ZendoModerator(difficulty="hard")
+        for base_structure in mod_hard.base_structures:
+            self.assertTrue(mod_hard.does_test_structure_fit_moderator_rule(base_structure))

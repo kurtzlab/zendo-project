@@ -23,6 +23,7 @@ class Rule:
         EXACTLY 0 YELLOW
         AT_LEAST 3 PYRAMIDS
         """
+        self._str_rule = rule
         self._is_exactly = False
         self._is_at_least = False
         self._quantity = None
@@ -106,3 +107,6 @@ class Rule:
         if (self._is_exactly and structure_qty != self._quantity) or \
             (self._is_at_least and structure_qty < self._quantity): return False
         return True
+
+    def __str__(self):
+        return self._str_rule
