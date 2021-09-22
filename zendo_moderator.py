@@ -121,6 +121,16 @@ class ZendoModerator:
         """
         return self._rule.does_structure_fit_rule(structure)
 
+    def guess_rule(self, rule: str) -> bool:
+        """
+        Returns a boolean whether a string matches the rule
+        """
+        return str(self._rule).lower() == rule.lower()
+
     @property
     def base_structures(self):
         return self._base_structures
+
+    @property
+    def rule(self):
+        return self._rule
