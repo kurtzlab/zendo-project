@@ -3,7 +3,7 @@
  1. Install python 3 - https://www.python.org/downloads/
  2. Clone the repo - `git clone https://github.com/kurtzlab/zendo-project.git`
  3. CD into the root - `cd zendo-project/`
- 4. Run human_interface_game.py - `python3 human_interface_game.py`
+ 4. Run human_interface_game.py - `python3 human_interface_game.py easy` where you can set the difficulty to `easy` `medium` or `hard`.
 
 **Notes Regarding Zendo:**
 
