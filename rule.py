@@ -110,3 +110,10 @@ class Rule:
 
     def __str__(self):
         return self._str_rule
+
+    def __eq__(self, o: object) -> bool:
+        return self._is_exactly == o.is_exactly and \
+            self._is_at_least == o.is_at_least and \
+            self._quantity == o.quantity and \
+            self._color == o.color and \
+            self._shape == o.shape

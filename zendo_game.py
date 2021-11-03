@@ -18,11 +18,23 @@ class ZendoGame:
 
     def __init__(self, difficulty="easy") -> None:
         self._moderator = ZendoModerator(difficulty=difficulty)
-        self._observer = ZendoObserver()
+        self._observer = ZendoObserver(self._moderator)
 
 
     def play_zendo(self):
         """
         Plays zendo
         """
-        pass
+        observer_guess = self._observer.play()
+        #print(f"Moderator Rule: {self._moderator.rule}\nObserver Guess: {observer_guess}\nWin?: {self._moderator.rule == observer_guess}")
+        return self._moderator.rule == observer_guess
+
+if __name__ == '__main__':
+    wins = 0
+    num_games = 1000
+    for i in range(num_games):
+        print(i)
+        zg = ZendoGame()
+        win = zg.play_zendo()
+        if win: wins += 1
+    print(f"{wins} wins from {num_games} games. {float(wins) / num_games}% win rate")
