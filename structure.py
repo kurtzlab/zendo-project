@@ -5,7 +5,7 @@ https://www.looneylabs.com/sites/default/files/literature/Zendo%20Rules%20Book%2
 
 class Structure:
     """
-    Pieces: 27 pyramids, 27 wedges, 27 blocks (9 per color). Possible colors are: red, blue, yellow.
+    Zendo structure representation
     """
 
     def __init__(
@@ -20,107 +20,50 @@ class Structure:
         num_yellow_wedges: int = 0,
         num_yellow_blocks: int = 0,
     ) -> None:
+        """
+        Shapes: pyramids, wedges, blocks. Possible colors are: red, blue, yellow.
+        """
 
-        self._num_red_pyramids = num_red_pyramids
-        self._num_red_wedges = num_red_wedges
-        self._num_red_blocks = num_red_blocks
+        self.num_red_pyramids = num_red_pyramids
+        self.num_red_wedges = num_red_wedges
+        self.num_red_blocks = num_red_blocks
 
-        self._num_blue_pyramids = num_blue_pyramids
-        self._num_blue_wedges = num_blue_wedges
-        self._num_blue_blocks = num_blue_blocks
+        self.num_blue_pyramids = num_blue_pyramids
+        self.num_blue_wedges = num_blue_wedges
+        self.num_blue_blocks = num_blue_blocks
 
-        self._num_yellow_pyramids = num_yellow_pyramids
-        self._num_yellow_wedges = num_yellow_wedges
-        self._num_yellow_blocks = num_yellow_blocks
+        self.num_yellow_pyramids = num_yellow_pyramids
+        self.num_yellow_wedges = num_yellow_wedges
+        self.num_yellow_blocks = num_yellow_blocks
 
-        self._num_red = self._num_red_pyramids + self._num_red_wedges + self._num_red_blocks
-        self._num_blue = self._num_blue_pyramids + self._num_blue_wedges + self._num_blue_blocks
-        self._num_yellow = self._num_yellow_pyramids + self._num_yellow_wedges + self._num_yellow_blocks
+        self.num_red = self.num_red_pyramids + self.num_red_wedges + self.num_red_blocks
+        self.num_blue = self.num_blue_pyramids + self.num_blue_wedges + self.num_blue_blocks
+        self.num_yellow = self.num_yellow_pyramids + self.num_yellow_wedges + self.num_yellow_blocks
 
-        self._num_pyramids = self._num_red_pyramids + self._num_blue_pyramids + self._num_yellow_pyramids
-        self._num_wedges = self._num_red_wedges + self._num_blue_wedges + self._num_yellow_wedges
-        self._num_blocks = self._num_red_blocks + self._num_blue_blocks + self._num_yellow_blocks
-    
-    @property
-    def num_red_pyramids(self):
-        return self._num_red_pyramids
+        self.num_pyramids = self.num_red_pyramids + self.num_blue_pyramids + self.num_yellow_pyramids
+        self.num_wedges = self.num_red_wedges + self.num_blue_wedges + self.num_yellow_wedges
+        self.num_blocks = self.num_red_blocks + self.num_blue_blocks + self.num_yellow_blocks
 
-    @property
-    def num_red_wedges(self):
-        return self._num_red_wedges
-
-    @property
-    def num_red_blocks(self):
-        return self._num_red_blocks
-
-    @property
-    def num_blue_pyramids(self):
-        return self._num_blue_pyramids
-
-    @property
-    def num_blue_wedges(self):
-        return self._num_blue_wedges
-
-    @property
-    def num_blue_blocks(self):
-        return self._num_blue_blocks
-
-    @property
-    def num_yellow_pyramids(self):
-        return self._num_yellow_pyramids
-
-    @property
-    def num_yellow_wedges(self):
-        return self._num_yellow_wedges
-
-    @property
-    def num_yellow_blocks(self):
-        return self._num_yellow_blocks
-
-    @property
-    def num_red(self):
-        return self._num_red
-
-    @property
-    def num_blue(self):
-        return self._num_blue
-
-    @property
-    def num_yellow(self):
-        return self._num_yellow
-
-    @property
-    def num_pyramids(self):
-        return self._num_pyramids
-
-    @property
-    def num_wedges(self):
-        return self._num_wedges
-
-    @property
-    def num_blocks(self):
-        return self._num_blocks
-
-    def __EQ__(self, other):
-        return self._num_red_pyramids == other.num_red_pyramids and \
-            self._num_red_wedges == other.num_red_wedges and \
-            self._num_red_blocks == other.num_red_blocks and \
-            self._num_blue_pyramids == other.num_blue_pyramids and \
-            self._num_blue_wedges == other.num_blue_wedges and \
-            self._num_blue_blocks == other.num_blue_blocks and \
-            self._num_yellow_pyramids == other.num_yellow_pyramids and \
-            self._num_yellow_wedges == other.num_yellow_wedges and \
-            self._num_yellow_blocks == other.num_yellow_blocks
+    def __EQ__(self, other) -> bool:
+        return self.num_red_pyramids == other.num_red_pyramids and \
+            self.num_red_wedges == other.num_red_wedges and \
+            self.num_red_blocks == other.num_red_blocks and \
+            self.num_blue_pyramids == other.num_blue_pyramids and \
+            self.num_blue_wedges == other.num_blue_wedges and \
+            self.num_blue_blocks == other.num_blue_blocks and \
+            self.num_yellow_pyramids == other.num_yellow_pyramids and \
+            self.num_yellow_wedges == other.num_yellow_wedges and \
+            self.num_yellow_blocks == other.num_yellow_blocks
 
     def __str__(self):
         return f"""
-        num_red_pyramids: {self._num_red_pyramids}
-        num_red_wedges: {self._num_red_wedges}
-        num_red_blocks: {self._num_red_blocks}
-        num_blue_pyramids: {self._num_blue_pyramids}
-        num_blue_wedges: {self._num_blue_wedges}
-        num_blue_blocks: {self._num_blue_blocks}
-        num_yellow_pyramids: {self._num_yellow_pyramids}
-        num_yellow_wedges: {self._num_yellow_wedges}
-        num_yellow_blocks: {self._num_yellow_blocks}
+        num_red_pyramids: {self.num_red_pyramids}
+        num_red_wedges: {self.num_red_wedges}
+        num_red_blocks: {self.num_red_blocks}
+        num_blue_pyramids: {self.num_blue_pyramids}
+        num_blue_wedges: {self.num_blue_wedges}
+        num_blue_blocks: {self.num_blue_blocks}
+        num_yellow_pyramids: {self.num_yellow_pyramids}
+        num_yellow_wedges: {self.num_yellow_wedges}
+        num_yellow_blocks: {self.num_yellow_blocks}
         """

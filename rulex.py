@@ -1,50 +1,72 @@
-# priority queue of rules. test new rules until find one that matches. then try to disprove.
-import random
-from constants import MAX_QTY
-from structure import Structure
+"""
+Implimentation of RULEX model of AI hypothesis testing.
+https://doi.org/10.1037/0033-295x.101.1.53
+"""
+from typing import Dict, List
 from rule import Rule
+from utils import generate_test_structure
 
 class Rulex:
+    """
+    RULEX model
+    """
 
-    def __init__(self, priority_queue_of_rules=[]) -> None:
+    def __init__(self, priority_queue_of_rules: List = []) -> None:
         """
         :param priority_queue_of_rules: list of rules ordered from least complex to most complex  [least --> most]
         """
-        self.priority_queue_of_rules = priority_queue_of_rules
-        self.current_rule_idx = 0
-        self.num_structures_check_for_guess = 1000
+        self._priority_queue_of_rules = priority_queue_of_rules
+        self._current_rule_idx = 0  # track where you are in priority queue
+        self._num_structures_check_for_guess = 1000  # number of structures the potential rule must fit correctly before making a guess
 
-    def find_next_working_rule(self, structures_in_play_dict):
+    def find_next_working_rule(self, structures_in_play_dict: Dict) -> Rule:
         """
+        Used to find potential guesses for the rule.
         Iterates through possible rules until one is found that fits all structures currently in play.
-        If not more rules exist, raises ValueError
+        To "fit" all structures, the rule must fit structures that fit the moderator rule, and not fit the structures that don't fit the moderator rule.
+        If no more rules exist, raises ValueError
+
+        :param structures_in_play_dict: dictionary of all built structures and boolean if the structure abides by the moderator rule. {structure obj: boolean}
+        :return: Rule object of next potential rule
         """
-        if not self.priority_queue_of_rules:
+        if not self._priority_queue_of_rules:
             raise ValueError("No rules were provided")
 
         fits_all_structures = False
         rule = None
-        while not fits_all_structures and self.current_rule_idx < len(self.priority_queue_of_rules):
+
+        # find a rule candidate
+        while not fits_all_structures and self._current_rule_idx < len(self._priority_queue_of_rules):
+            # create rule obj so we can check if structures fit
+            rule = Rule(self._priority_queue_of_rules[self._current_rule_idx])
+
             fits_all_structures = True
             for structure, does_structure_fit_rule in structures_in_play_dict.items():
-                rule = Rule(self.priority_queue_of_rules[self.current_rule_idx])
                 if rule.does_structure_fit_rule(structure) != does_structure_fit_rule:
                     fits_all_structures = False
+                    self._current_rule_idx += 1
                     break
-            self.current_rule_idx += 1
 
         if not fits_all_structures:
             raise ValueError("No remaining rules. Could not find a valid rule")
         return rule
 
-    def find_rule(self, structures_in_play_dict, moderator_rule):
+    def find_guess(self, structures_in_play_dict: Dict, moderator_rule: Rule) -> Rule:
         """
-        Get the next rule candidate. Create test candidate structure that does not fit this rule and test if the moderator rule agrees.
+        Loops through potential rules until find one that agrees with the moderator rule on self._num_structures_check_for_guess number of structures
+
+        :param structures_in_play_dict: dictionary of all built structures and boolean if the structure abides by the moderator rule. {structure obj: boolean}
+        :param moderator_rule: the moderator rule object
+        :return: rule object to make guess with
         """
-        next_rule = self.find_next_working_rule(structures_in_play_dict)
         count = 0
-        while count < self.num_structures_check_for_guess:
-            test_structure = self.generate_test_structure(structures_in_play_dict, moderator_rule)
+        next_rule = self.find_next_working_rule(structures_in_play_dict)
+
+        while count < self._num_structures_check_for_guess:
+            test_structure = generate_test_structure(
+                structures_in_play_dict=structures_in_play_dict,
+            )
+            # add the test to the structures in play
             structures_in_play_dict[test_structure] = moderator_rule.does_structure_fit_rule(test_structure)
             if next_rule.does_structure_fit_rule(test_structure) == structures_in_play_dict[test_structure]:
                 count += 1
@@ -52,26 +74,3 @@ class Rulex:
                 next_rule = self.find_next_working_rule(structures_in_play_dict)
                 count = 0
         return next_rule
-
-    def generate_test_structure(self, structures_in_play_dict, moderator_rule):
-        possible_next = None
-        is_unique = False
-        while not possible_next and not is_unique:
-            is_unique = True
-            possible_next = Structure(
-                num_red_pyramids=random.randrange(0, MAX_QTY + 1),
-                num_red_wedges=random.randrange(0, MAX_QTY + 1),
-                num_red_blocks=random.randrange(0, MAX_QTY + 1),
-                num_blue_pyramids=random.randrange(0, MAX_QTY + 1),
-                num_blue_wedges=random.randrange(0, MAX_QTY + 1),
-                num_blue_blocks=random.randrange(0, MAX_QTY + 1),
-                num_yellow_pyramids=random.randrange(0, MAX_QTY + 1),
-                num_yellow_wedges=random.randrange(0, MAX_QTY + 1),
-                num_yellow_blocks=random.randrange(0, MAX_QTY + 1),
-            )
-            for structure in structures_in_play_dict:
-                if structure == possible_next:
-                    is_unique = False
-                    break
-        structures_in_play_dict[possible_next] = moderator_rule.does_structure_fit_rule(possible_next)
-        return possible_next

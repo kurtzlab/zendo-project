@@ -1,12 +1,17 @@
-**Instructions to play:**
+**Zendo Research Project**
+The purpose of this codebase is to play the board game Zendo. https://www.looneylabs.com/games/zendo
+We are writing transparent code to demonstrate robust Artificial Intelligence in the domain of Zendo. This project is intended to illustry cognitive decision making ability in machines.
+
+Zendo consists of two players: a moderator and observer. The moderator picks a random rule and builds two base case structures that adhere to the rule. Then, the observer can either guess what the rule is, or build additional structures, to which the moderator states whether or not these additional structures adhere to the rule.
+
+There are two ways to play in this repo:
+
+ 1. Human Observer vs. Computer Moderator (human_interface_game.py)
+ 2. Computer Observer vs. Computer Moderator (zendo_game.py)
+
+**Instructions to play human vs. computer:**
 
  1. Install python 3 - https://www.python.org/downloads/
  2. Clone the repo - `git clone https://github.com/kurtzlab/zendo-project.git`
  3. CD into the root - `cd zendo-project/`
- 4. Run human_interface_game.py - `python3 human_interface_game.py easy` where you can set the difficulty to `easy` `medium` or `hard`.
-
-**Notes Regarding Zendo:**
-
- 1. There are two roles - moderator and observer. You are playing the role of the observer. The moderator (computer) will generate a rule and two base structures. From there you must generate test structures to see if they fit the rule or not, as well as guess the rule.
- 2. Upper / Lower case doesn't matter.
- 3. Rules should be in the format `QTY_TYPE QTY COLOR SHAPE`. `QTY TYPE` and `QTY` are required. At least one of `COLOR` or `SHAPE` is required. `QTY_TYPE` can be either `EXACTLY` or `AT_LEAST`. `QTY` is an integer >= 0.
+ 4. Run human_interface_game.py with a difficulty - `python3 human_interface_game.py easy`. Difficulty defaults to easy; options are `easy`, `medium`, `hard`.

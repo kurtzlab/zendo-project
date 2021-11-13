@@ -2,12 +2,10 @@
 Zendo game with human observer and computer moderator
 """
 import sys
+import logging
+from rule import Rule
 from zendo_moderator import ZendoModerator
 from structure import Structure
-from rule import Rule
-from constants import (
-    RED, BLUE, YELLOW, EXACTLY, AT_LEAST, PYRAMIDS, WEDGES, BLOCKS
-)
 
 
 class ZendoHumanGame:
@@ -15,16 +13,15 @@ class ZendoHumanGame:
     Play the role of observer in Zendo.
     """
 
-    def __init__(self, difficulty="easy") -> None:
+    def __init__(self, difficulty: str = "easy") -> None:
         assert difficulty in ["easy", "medium", "hard"]
         self._moderator = ZendoModerator(difficulty=difficulty)
-        print(f"The base structures are:\n{self._moderator.base_structures[0]}\n{self._moderator.base_structures[1]}\n")
-        self.play_zendo()
+        logging.info(f"The base structures are:\n{self._moderator.base_structures[0]}\n{self._moderator.base_structures[1]}\n")
 
 
     def play_zendo(self):
         """
-        Plays zendo
+        Plays zendo by asking for human input to play the role of the observer
         """
         valid_commands = ["Quit", "Create Structure", "Guess Rule", "Show Rule"]
         command = ""
@@ -52,21 +49,23 @@ class ZendoHumanGame:
                     num_yellow_wedges=num_yellow_wedges,
                     num_yellow_blocks=num_yellow_blocks
                 )
-                print(f"\nDoes your structure fit the rule? {self._moderator.does_test_structure_fit_moderator_rule(tmp_structure)}")
+                logging.info(f"\nDoes your structure fit the rule?: {self._moderator.does_test_structure_fit_moderator_rule(tmp_structure)}")
             elif command == valid_commands[2].lower():
                 rule = input("Enter guess:\n")
-                if self._moderator.guess_rule(rule):
-                    print("You won!")
+                if Rule(rule) == self._moderator.rule:
+                    logging.info("You won!")
                 else:
-                    print(f"Incorrect, the rule was: {self._moderator.rule}")
+                    logging.info(f"Incorrect, the rule was: {self._moderator.rule}")
                 break
             elif command == valid_commands[3].lower():
-                print(self._moderator.rule)
+                logging.info(self._moderator.rule)
             elif command != valid_commands[0].lower():
-                print("Invalid command")
-            print("\n")
+                logging.info("Invalid command")
+
+            logging.info("\n")
 
 
 if __name__ == "__main__":
     diff = sys.argv[1]
-    ZendoHumanGame(difficulty=diff)
+    zhg = ZendoHumanGame(difficulty=diff)
+    zhg.play_zendo()
