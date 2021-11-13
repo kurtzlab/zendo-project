@@ -75,8 +75,9 @@ class ZendoModerator:
             return None
 
         # for AT_LEAST add up to 3 extra qty
+        at_least_extra_qty = 0
         if rule.is_at_least:
-            rule.quantity += random.choice(list(range(4)))
+            at_least_extra_qty = random.choice(list(range(4)))
 
         # harder structures have more meaningless components
         extra_qty_for_difficulty = 0
@@ -113,7 +114,7 @@ class ZendoModerator:
         elif rule.shape: target_indexes = structure_attribute_to_index_dict[rule.shape]
 
         # add random components
-        for _ in range(rule.quantity):
+        for _ in range(rule.quantity + at_least_extra_qty):
             structure_attribute_list[random.choice(target_indexes)] += 1
         for _ in range(extra_qty_for_difficulty):
             structure_attribute_list[random.choice([i for i in range(0, 9) if i not in target_indexes])] += 1
