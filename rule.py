@@ -43,7 +43,7 @@ class Rule:
                 self.is_at_least = True
             self.quantity = int(rule_list[1])
             if self.quantity < MIN_QUANTITY:
-                raise ValueError("Quantity must be greater than 0.")
+                raise ValueError(f"Quantity must be greater than or equal to {MIN_QUANTITY}.")
 
             # parse the color and shape
             if rule_list[2] in [RED, BLUE, YELLOW]:

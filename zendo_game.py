@@ -34,7 +34,6 @@ class ZendoGame:
         observer_guess = self._observer.play(dict_of_possible_rules_to_rule_values)
         did_ai_win = self._moderator.rule == observer_guess
         if verbose and not did_ai_win:
-            print(f"{observer_guess} | {self._moderator.rule}")
             logging.info(f"Incorrect guess: {observer_guess}. Correct rule was {self._moderator.rule}")
         save_rules_to_file(dict_of_possible_rules_to_rule_values)
         return did_ai_win
