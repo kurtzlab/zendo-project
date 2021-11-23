@@ -6,7 +6,7 @@ To simplify the code, we've limited rules to only consist of quantities, colors,
 
 from structure import Structure
 from constants import (
-    RED, BLUE, YELLOW, EXACTLY, AT_LEAST, PYRAMIDS, WEDGES, BLOCKS
+    MIN_QUANTITY, RED, BLUE, YELLOW, EXACTLY, AT_LEAST, PYRAMIDS, WEDGES, BLOCKS
 )
 
 class Rule:
@@ -21,7 +21,7 @@ class Rule:
 
         Examples:
         EXACTLY 2 RED BLOCKS
-        EXACTLY 0 YELLOW
+        EXACTLY 1 YELLOW
         AT_LEAST 3 PYRAMIDS
         """
         self._str_rule = rule
@@ -42,6 +42,8 @@ class Rule:
             elif rule_list[0] == AT_LEAST:
                 self.is_at_least = True
             self.quantity = int(rule_list[1])
+            if self.quantity < MIN_QUANTITY:
+                raise ValueError("Quantity must be greater than 0.")
 
             # parse the color and shape
             if rule_list[2] in [RED, BLUE, YELLOW]:

@@ -11,13 +11,14 @@ class Rulex:
     RULEX model
     """
 
-    def __init__(self, priority_queue_of_rules: List = []) -> None:
+    def __init__(self, dict_of_possible_rules_to_rule_values: Dict[str, int]) -> None:
         """
-        :param priority_queue_of_rules: list of rules ordered from least complex to most complex  [least --> most]
+        :param dict_of_possible_rules_to_rule_values: Dict of {string rule: rule value (based on how often it is the correct / incorrect rule)}
         """
-        self._priority_queue_of_rules = priority_queue_of_rules
+        self._dict_of_possible_rules_to_rule_values = dict_of_possible_rules_to_rule_values
+        self._priority_queue_of_rules = [i[0] for i in sorted(dict_of_possible_rules_to_rule_values.items(), key=lambda x: x[1])]
         self._current_rule_idx = 0  # track where you are in priority queue
-        self._num_structures_check_for_guess = 1000  # number of structures the potential rule must fit correctly before making a guess
+        self._num_structures_check_for_guess = 5  # number of structures the potential rule must fit correctly before making a guess
 
     def find_next_working_rule(self, structures_in_play_dict: Dict) -> Rule:
         """
@@ -44,11 +45,13 @@ class Rulex:
             for structure, does_structure_fit_rule in structures_in_play_dict.items():
                 if rule.does_structure_fit_rule(structure) != does_structure_fit_rule:
                     fits_all_structures = False
+                    self._dict_of_possible_rules_to_rule_values[str(rule)] -= 1
                     self._current_rule_idx += 1
                     break
 
         if not fits_all_structures:
             raise ValueError("No remaining rules. Could not find a valid rule")
+        self._dict_of_possible_rules_to_rule_values[str(rule)] += 1
         return rule
 
     def find_guess(self, structures_in_play_dict: Dict, moderator_rule: Rule) -> Rule:

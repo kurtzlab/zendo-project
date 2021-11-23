@@ -1,14 +1,9 @@
 """
 Zendo observer
 """
-import random
-from typing import Dict
 from rule import Rule
 from zendo_moderator import ZendoModerator
 from structure import Structure
-from constants import (
-    MAX_QTY, PRIORITY_QUEUE_OF_ALL_POSSIBLE_RULES
-)
 from rulex import Rulex
 
 
@@ -37,13 +32,16 @@ class ZendoObserver:
         """
         return moderator.does_test_structure_fit_moderator_rule(structure)
 
-    def play(self) -> Rule:
+    def play(self, dict_of_possible_rules_to_rule_values) -> Rule:
         """
         Plays zendo
 
+        :param dict_of_possible_rules_to_rule_values: Dict of {string rule: rule value (based on how often it is the correct / incorrect rule)}
         :return: rule object to make guess with
         """
-        rulex_obj = Rulex(PRIORITY_QUEUE_OF_ALL_POSSIBLE_RULES)
+        rulex_obj = Rulex(
+            dict_of_possible_rules_to_rule_values=dict_of_possible_rules_to_rule_values,
+        )
         structures_dict = dict(
             zip(
                 self.moderator.base_structures,

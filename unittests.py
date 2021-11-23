@@ -50,7 +50,7 @@ class TestRule(unittest.TestCase):
         Test creating valid rules
         """
         rule1 = Rule(rule="EXACTLY 2 RED BLOCKS")
-        rule2 = Rule(rule="EXACTLY 0 YELLOW")
+        rule2 = Rule(rule="EXACTLY 1 YELLOW")
         rule3 = Rule(rule="AT_LEAST 3 PYRAMIDS")
 
         self.assertEqual(rule1.is_exactly, True)
@@ -62,7 +62,7 @@ class TestRule(unittest.TestCase):
         self.assertEqual(rule3.is_at_least, True)
 
         self.assertEqual(rule1.quantity, 2)
-        self.assertEqual(rule2.quantity, 0)
+        self.assertEqual(rule2.quantity, 1)
         self.assertEqual(rule3.quantity, 3)
 
         self.assertEqual(rule1.color, RED)
@@ -82,6 +82,9 @@ class TestRule(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             Rule(rule="INVALID 2 RED BLOCKS")
+
+        with self.assertRaises(ValueError):
+            Rule(rule="EXACTLY 0 YELLOW")
 
     def test_does_structure_fit_rule(self):
         """

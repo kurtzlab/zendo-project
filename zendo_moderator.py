@@ -5,7 +5,7 @@ import random
 from structure import Structure
 from rule import Rule
 from constants import (
-    RED, BLUE, YELLOW, EXACTLY, AT_LEAST, PYRAMIDS, WEDGES, BLOCKS
+    MAX_QTY, MIN_QUANTITY, RED, BLUE, YELLOW, EXACTLY, AT_LEAST, PYRAMIDS, WEDGES, BLOCKS
 )
 
 
@@ -13,8 +13,6 @@ class ZendoModerator:
     """
     Play the role of moderator in Zendo.
     """
-    # set max qty for structure pieces
-    MAX_NUM_RANGE = 5
 
     def __init__(self, difficulty : str = "easy") -> None:
         """
@@ -44,7 +42,7 @@ class ZendoModerator:
         color_options = [RED, BLUE, YELLOW]
         number_type_options = [EXACTLY, AT_LEAST]
         number_options = list(
-            range(ZendoModerator.MAX_NUM_RANGE)
+            range(MIN_QUANTITY, MAX_QTY + 1)
         )
         block_type_options = [PYRAMIDS, WEDGES, BLOCKS]
         color_block_combo_options = ["both", "only_color", "only_block"]

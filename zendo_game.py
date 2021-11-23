@@ -2,6 +2,7 @@
 Zendo game play computer vs. computer
 """
 import logging
+from utils import load_rules, save_rules_to_file
 from zendo_moderator import ZendoModerator
 from zendo_observer import ZendoObserver
 
@@ -29,10 +30,13 @@ class ZendoGame:
         :param verbose: when true, logs incorrect guesses to help improve AI
         :return: boolean if guessed the correct rule
         """
-        observer_guess = self._observer.play()
+        dict_of_possible_rules_to_rule_values = load_rules()
+        observer_guess = self._observer.play(dict_of_possible_rules_to_rule_values)
         did_ai_win = self._moderator.rule == observer_guess
         if verbose and not did_ai_win:
-            logging.warning(f"Incorrect guess: {observer_guess}. Correct rule was {self._moderator.rule}")
+            print(f"{observer_guess} | {self._moderator.rule}")
+            logging.info(f"Incorrect guess: {observer_guess}. Correct rule was {self._moderator.rule}")
+        save_rules_to_file(dict_of_possible_rules_to_rule_values)
         return did_ai_win
 
 if __name__ == '__main__':
@@ -42,5 +46,5 @@ if __name__ == '__main__':
     for i in range(num_games):
         logging.info(f"Game {i} of {num_games}")
         zg = ZendoGame()
-        wins += 1 if zg.play_zendo() else 0
+        wins += 1 if zg.play_zendo(verbose=True) else 0
     logging.info(f"{wins} wins from {num_games} games. {float(wins) / num_games}% win rate")
